@@ -1,0 +1,8 @@
+venv
+media
+.idea
+db.sqlite3
+*.log
+*.pot
+*.pyc
+__pycache__
