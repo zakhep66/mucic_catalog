@@ -4,7 +4,7 @@ from django.db import models
 class Composition(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField()
-    date_release = models.DateField()
+    date_release = models.DateField(null=True, blank=True)
     category = models.ForeignKey('Category', on_delete=models.CASCADE)
 
     def __str__(self):
