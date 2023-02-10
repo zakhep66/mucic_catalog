@@ -1,6 +1,7 @@
 from rest_framework import viewsets as v
 from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from app.models import Composition, Group, Artist
@@ -16,6 +17,7 @@ class CompositionViewSet(v.ModelViewSet):
 	queryset = Composition.objects.all()
 	serializer_class = CompositionSerializer
 	pagination_class = LimitOffsetPagination
+	permission_classes = [IsAuthenticated, ]
 
 	@action(detail=False, methods=['get'])
 	def get_categories(self, request, pk=None):
@@ -28,6 +30,7 @@ class GroupViewSet(v.ModelViewSet):
 	queryset = Group.objects.all()
 	serializer_class = GroupSerializer
 	pagination_class = LimitOffsetPagination
+	permission_classes = [IsAuthenticated, ]
 
 	@action(detail=False, methods=['post'])
 	def add_composition(self, request, pk=None):
@@ -41,6 +44,7 @@ class ArtistViewSet(v.ModelViewSet):
 	queryset = Artist.objects.all()
 	serializer_class = ArtistSerializer
 	pagination_class = LimitOffsetPagination
+	permission_classes = [IsAuthenticated, ]
 
 	@action(detail=False, methods=['get'])
 	def get_role(self, request, pk=None):
