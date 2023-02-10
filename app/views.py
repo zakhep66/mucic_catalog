@@ -3,25 +3,38 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from app.models import Composition, Group, Artist
-from app.serializers import CompositionSerializer, GroupSerializer, ArtistSerializer
+from app.serializers import CompositionSerializer, GroupSerializer, ArtistSerializer, CategorySerializer, RoleSerializer
 
 
 class CompositionViewSet(v.ModelViewSet):
 	queryset = Composition.objects.all()
 	serializer_class = CompositionSerializer
 
-
-# todo: добавить action на get запрос, который будет возвращать список категорий, которые относятся к композиции
-# todo: добавить action на post запрос, который будет добавлять категорию к композиции
+	@action(detail=False, methods=['get'])
+	def get_categories(self, request, pk=None):
+		composition = self.get_object()
+		category = CategorySerializer(composition.category)
+		return Response(category.data)
 
 
 class GroupViewSet(v.ModelViewSet):
 	queryset = Group.objects.all()
 	serializer_class = GroupSerializer
 
+	@action(detail=False, methods=['post'])
+	def add_composition(self, request, pk=None):
+		groups = self.get_object()
+		composition = Composition.objects.get(pk=request.data['composition'])
+		groups.compositions.add(composition)
+		return Response('Composition added')
+
 
 class ArtistViewSet(v.ModelViewSet):
 	queryset = Artist.objects.all()
 	serializer_class = ArtistSerializer
 
-# todo: добавить action на get запрос, который будет возвращать роль исполнителя
+	@action(detail=False, methods=['get'])
+	def get_role(self, request, pk=None):
+		artist = self.get_object()
+		role = RoleSerializer(artist.role)
+		return Response(role.data)
